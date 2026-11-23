@@ -19,10 +19,25 @@ A standard Transformer Decoder Block has two main sub-layers:
 
 **In most implementations, MoEs replaces ONLY the FFN layer.**
 
-![Standard vs MOE Transformer](MOE_Transformer.png)
+![Standard vs MOE Transformer](images/MOE_Transformer.png)
 
 **MoE layer** has three fundamental parts: **The Experts**, **The Router** (Gate), and **The Combiner**.
 
+**1. Experts:** Each expert is simply an independent Feed-Forward Network (FFN)-usually a SwiGLU MLP in modern LLMs (two linear projections up, a SiLU/Swish gating activation, and one linear projection down).
+
+
+![Sparse Model](images/SparseModel.png)
+- Each token in this example is colored with the first expert choice (source: Mixtral of Experts paper, https://arxiv.org/pdf/2401.04088). 
+- This visual also demonstrates that **experts tend to focus on syntax** rather than a specific domain. 
+
+
+**2. Router (Gating Network):** The Router is a tiny, lightweight neural network (usually just a single linear layer with no bias) that determines which tokens are sent to which experts.
+
+
+**3. Combiner:** 
+
+
+![Overview of MoE Architecture](images/MOE-Overview.png)
 
 # Jargon:
 - FLOPs (floating-point operations): Measures the total math work required to train a model
@@ -31,3 +46,10 @@ A standard Transformer Decoder Block has two main sub-layers:
 > $Total FLOPs \approx 6 * N * D $
 
 > where N=no.of parameters, D= no.of training tokens
+- Projection Up: A linear layer (matrix multiplication) that maps the vector from the smaller model size(eg. 4096) up to a wider hidden size(eg. 11008)
+- Projection Down: A linear layer that maps the vector from that wide hidden size(eg. 11008) back down to the original model size(eg. 4096)
+
+# Resources:
+- https://www.cerebras.ai/blog/moe-guide-router
+- https://newsletter.maartengrootendorst.com/p/a-visual-guide-to-mixture-of-experts
+
