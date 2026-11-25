@@ -39,6 +39,21 @@ A standard Transformer Decoder Block has two main sub-layers:
 
 ![Overview of MoE Architecture](images/MOE-Overview.png)
 
+## Why tinyMoE and nanoMoE
+
+- Traditional MoE has a well-known catch: **compute scales with active parameters, but memory (VRAM) scales with total parameters.**
+- MoE's have reduced active parameters, so generate tokens faster and uses fewer FLOPs than a dense model but we still have to load all parameters into VRAM.
+tinyMoE and nanoMoE architectures are optimised/distilled architectures to reduce total parameters, so that these MoE models fit on laptop/edge devices.
+- In giant MoEs, each expert is large enough to learn complex skills independently. In Tiny MoEs, if you split an already small network into too many experts, individual experts become too weak. Modern Tiny MoEs compensate for this using shared experts (always active alongside routed experts) or staged distillation from a larger teacher MoE.
+
+
+## Classic FFN (The 2-Matrix Design)
+
+
+
+
+
+
 # Jargon:
 - FLOPs (floating-point operations): Measures the total math work required to train a model
 - FLOPS (floating-point operations per second): Measures how fast hardware executes that math
@@ -52,4 +67,6 @@ A standard Transformer Decoder Block has two main sub-layers:
 # Resources:
 - https://www.cerebras.ai/blog/moe-guide-router
 - https://newsletter.maartengrootendorst.com/p/a-visual-guide-to-mixture-of-experts
+- https://cameronrwolfe.substack.com/p/nano-moe
+- 
 
